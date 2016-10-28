@@ -29,6 +29,12 @@
                     # Si exite la carpeta o se ha creado
                     if(file_exists($carpetaDestino) || @mkdir($carpetaDestino))
                     {
+                        if(file_exists( $origen=$_FILES["archivo_foto"]["tmp_name"][$i]) ){
+                            echo "existe archivo";
+                            // Aquí debemos de renombrar el archivo y guardar la dirección en la base de datos.
+                            
+                        }
+                            
                         $origen=$_FILES["archivo_foto"]["tmp_name"][$i];
                         $destino=$carpetaDestino.$_FILES["archivo_foto"]["name"][$i];
 
