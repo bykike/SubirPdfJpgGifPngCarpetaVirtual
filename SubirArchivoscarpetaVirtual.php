@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8">
-    <title>Subir imágenes/pdf/doc al servidor en carpeta virtual</title>
-</head>
- 
-<body>
-
-    
-    <?php
+<?php
     
         ####################################################################################################
-        # Definimos carpeta destino para fotos, pdfs y docs y comprobamos tanto el tamaño como la extensión
+        # Defino carpeta destino para fotos, pdfs y docs y compruebo tanto el tamaño como la extensión
         ####################################################################################################
 
 
@@ -21,100 +12,110 @@
         $uploadedfilePDFDOC_size=$_FILES['uploadedfilePDFDOC'][size];
     
     
-        # Comprobamos el tamaño para la imagen seleccionada para JPG
+        # Compruebo el tamaño para la imagen seleccionada para JPG
     
-        echo $_FILES[uploadedfileJPG][name];
-        if ($_FILES[uploadedfileJPG][size]>10000000) /* Equivale a 1MB */
+        // echo $_FILES[uploadedfileJPG][name];
+        if ($_FILES[uploadedfileJPG][size] > 1000000) /* Equivale a 500000 equivale a 500Kb */
             {
-            $msg=$msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo<BR>";
-            $uploadedfileload="false";
+            $msg=$msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo.<br>"; 
+            $uploadedfileJPGload="false";
+            echo $msg;
             }
 
-        # Comprobamos el tipo de archivo seleccionado sea JPG
+        # Compruebo el tipo de archivo seleccionado sea JPG, Gif y PNG
     
         if (!($_FILES[uploadedfileJPG][type] =="image/jpeg" OR 
               $_FILES[uploadedfileJPG][type] =="image/gif" OR                   
-              $_FILES[uploadedfileJPG][type] =="image/png" OR 
-              
-              $_FILES[uploadedfilePDFDOC][type] =="application/pdf" OR               
-              $_FILES[uploadedfilePDFDOC][type] =="application/msword"))
+              $_FILES[uploadedfileJPG][type] =="image/png"))
                 {
-                    $msg=$msg." Tu archivo tiene que ser JPG o GIF o PDF. Otros archivos no son permitidos<BR>";
-                    $uploadedfileload="false";
+                    $msg=$msg." Tu archivo tiene que ser JPG o GIF o PDF. Otros archivos no son permitidos.<br>";
+                    $uploadedfileJPGload="false";
                 }
     
     
-        # Comprobamos el tamaño para el documento seleccionado del PDF o DOC
+        # Compruebo el tamaño para el documento seleccionado del PDF o DOC
     
-        echo $_FILES[uploadedfilePDFDOC][name];
-        if ($_FILES[uploadedfilePDFDOC][size]>10000000) /* Equivale a 1MB */
+        // echo $_FILES[uploadedfilePDFDOC][name];
+        if ($_FILES[uploadedfilePDFDOC][size] > 1000000) /* Equivale a 500000 equivale a 500Kb */
             {
-            $msg=$msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo<BR>";
+            $msg = $msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo.<br>";
             $uploadedfilePDFDOCload="false";
+            echo $msg;
             }
 
-        # Comprobamos el tipo de archivo seleccionado sea JPG
+        # Compruebo el tipo de archivo seleccionado sea JPG
     
         if (!($_FILES[uploadedfilePDFDOC][type] =="application/pdf" OR               
               $_FILES[uploadedfilePDFDOC][type] =="application/msword"))
                 {
-                    $msg=$msg." Tu archivo tiene que ser PDF o DOC. Otros archivos no son permitidos<BR>";
+                    $msg = $msg." Tu archivo tiene que ser PDF o DOC. Otros archivos no son permitidos.<br>";
                     $uploadedfilePDFDOCload="false";
                 }
     
     
     
         ####################################################################################################
-        # Subimos los archivos a la carpeta /fotos y /curriculums 
+        # Subo los archivos a la carpeta /fotos y /curriculums 
         ####################################################################################################    
     
 
-        $file_name=$_FILES[uploadedfileJPG][name];
-        $add="fotos/$file_name";
+        $file_nameJPG=$_FILES[uploadedfileJPG][name];
+        $addJPG="fotos/$file_nameJPG";
+    
         if($uploadedfileJPGload=="true")
             {
+            
+            // Chequeo si el archivo existe y si es así lo renombro
+            if (file_exists($addJPG)) {
+                
+                echo "Anda!!! El archivo existe";
+                
+                $extension = ".jpg";
+                $nombrefichero = time();
+                
+                $addJPG = "fotos/" . $nombrefichero . $extension;
+                
+                /*
+                $extension = end(explode('.', $_FILES["archivo"]["tmp_name"]));
+                $nombrefichero = time();
+                move_uploaded_file($_FILES["archivo"]["tmp_name"], "archivos/" . $nombrefichero . $extension);
+                */
+            }
 
-            if(move_uploaded_file ($_FILES[uploadedfileJPG][tmp_name], $add))
+            if(move_uploaded_file ($_FILES[uploadedfileJPG][tmp_name], $addJPG))
                 {
-                    echo " Ha sido subido satisfactoriamente la imagen $add al directorio ";
+                    echo " Ha sido subida satisfactoriamente la imagen al directorio $addJPG. <br>";
                 }else{
-                      echo "Error al subir la imagen $add a la carpeta.";
+                      echo "Error al subir la imagen $addJPG al directorio.<br>";
                      }
 
             }else{
-                  echo $msg;
+                  //echo $msg;
                  }
 
 
         $file_namePDFDOC=$_FILES[uploadedfilePDFDOC][name];
         $addPDFDOC="curriculums/$file_namePDFDOC";
+
         if($uploadedfilePDFDOCload=="true")
             {
 
             if(move_uploaded_file ($_FILES[uploadedfilePDFDOC][tmp_name], $addPDFDOC))
                 {
-                    echo " Ha sido subido satisfactoriamente el documento $addPDFDOC al directorio ";
+                    echo " Ha sido subido satisfactoriamente el documento al directorio $addPDFDOC.<br>";
                 }else{
-                      echo "Error al subir la imagen $addPDFDOC a la carpeta.";
+                      echo "Error al subir el PDF/Doc $addPDFDOC al directorio.<br>";
                      }
 
             }else{
-                  echo $msgPDFDOC;
-                 }   
-    
-    
-    
+                  //echo $msgPDFDOC;
+                 } 
 
-    ?>
+        ####################################################################################################
+        # Volver al formulario
+        #################################################################################################### 
 
-
-    <form enctype="multipart/form-data" action="" method="POST">
-        <p>Suba Imagen JPG</p>
-        <input name="uploadedfileJPG" type="file">
-         <p>Suba documento PDF</p>
-        <input name="uploadedfilePDFDOC" type="file">
-        <input type="submit" value="Subir archivos">
-    </form> 
+        $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+        echo "<a href='$url'>Volver</a>";
     
-</body>
-</html>
+?>
