@@ -1,118 +1,60 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>Subir varias imagenes/pdf al servidor en carpeta virtual</title>
+    <title>Subir imágenes/pdf/doc al servidor en carpeta virtual</title>
 </head>
  
 <body>
 
     
     <?php
+    
         ################################################################
-        # Definimos la carpeta destino fotos
+        # Definimos carpeta destino para fotos, pdfs y docs
         ################################################################
 
-        $carpetaDestino="fotos/";
 
-        # Si hay algun archivo_foto que subir
-        if($_FILES["archivo_foto"]["name"][0])
-        {
+        $uploadedfileImageload="true";
+        $uploadedfile_size=$_FILES['uploadedfile'][size];
+    
+    
+        echo $_FILES[uploadedfile][name];
+        if ($_FILES[uploadedfile][size]>10000000) /* Equivale a 1MB */
+        {$msg=$msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo<BR>";
+        $uploadedfileload="false";}
 
-            # Recorremos todos los arhivos que se han subido
-            for($i=0;$i<count($_FILES["archivo_foto"]["name"]);$i++)
-            {
-
-                # Si es un formato de imagen o pdf
-                if($_FILES["archivo_foto"]["type"][$i]=="application/pdf" || $_FILES["archivo_foto"]["type"][$i]=="image/jpeg" || $_FILES["archivo_foto"]["type"][$i]=="image/pjpeg" || $_FILES["archivo_foto"]["type"][$i]=="image/gif" || $_FILES["archivo_foto"]["type"][$i]=="image/png")
+        if (!($_FILES[uploadedfile][type] =="image/jpeg" OR 
+              $_FILES[uploadedfile][type] =="image/gif" OR                   
+              $_FILES[uploadedfile][type] =="image/png" OR 
+              $_FILES[uploadedfile][type] =="application/pdf" OR               
+              $_FILES[uploadedfile][type] =="application/msword"))
                 {
-
-                    # Si exite la carpeta o se ha creado
-                    if(file_exists($carpetaDestino) || @mkdir($carpetaDestino))
-                    {
-                        if(file_exists( $origen=$_FILES["archivo_foto"]["tmp_name"][$i]) ){
-                            echo "existe archivo";
-                            // Aquí debemos de renombrar el archivo y guardar la dirección en la base de datos.
-                            
-                        }
-                            
-                        $origen=$_FILES["archivo_foto"]["tmp_name"][$i];
-                        $destino=$carpetaDestino.$_FILES["archivo_foto"]["name"][$i];
-
-                        # Movemos el archivo_foto
-                        if(@move_uploaded_file($origen, $destino))
-                        {
-                            echo "<br>".$_FILES["archivo_foto"]["name"][$i]." movido correctamente";
-                        }else{
-                            echo "<br>No se ha podido mover el archivo_foto: ".$_FILES["archivo_foto"]["name"][$i];
-                        }
-                    }else{
-                        echo "<br>No se ha podido crear la carpeta: up/".$user;
-                    }
-                }else{
-                    echo "<br>".$_FILES["archivo_foto"]["name"][$i]." - NO es imagen jpg";
+                    $msg=$msg." Tu archivo tiene que ser JPG o GIF o PDF. Otros archivos no son permitidos<BR>";
+                    $uploadedfileload="false";
                 }
-            }
-        }else{
-            echo "<br>No se ha subido ninguna imagen";
-        }
 
-        ################################################################
-        # Definimos la carpeta destino curriculums
-        ################################################################
+        $file_name=$_FILES[uploadedfile][name];
+        $add="imagen/$file_name";
+        if($uploadedfileload=="true"){
 
-        $carpetaDestino="curriculums/";
+            if(move_uploaded_file ($_FILES[uploadedfile][tmp_name], $add)){
+            echo " Ha sido subido satisfactoriamente la imagen XXXX al directorio XXXX ";
+            }else{echo "Error al subir la imagen XXXX";}
 
-        # Si hay algun archivo_cv que subir
-        if($_FILES["archivo_cv"]["name"][0])
-        {
+        }else{echo $msg;}
 
-            # Recorremos todos los arhivos que se han subido
-            for($i=0;$i<count($_FILES["archivo_cv"]["name"]);$i++)
-            {
-
-                # Si es un formato de imagen o pdf
-                if($_FILES["archivo_cv"]["type"][$i]=="application/pdf" || $_FILES["archivo_cv"]["type"][$i]=="image/jpeg" || $_FILES["archivo_cv"]["type"][$i]=="image/pjpeg" || $_FILES["archivo_cv"]["type"][$i]=="image/gif" || $_FILES["archivo_cv"]["type"][$i]=="image/png")
-                {
-
-                    # Si exite la carpeta o se ha creado
-                    if(file_exists($carpetaDestino) || @mkdir($carpetaDestino))
-                    {
-                        $origen=$_FILES["archivo_cv"]["tmp_name"][$i];
-                        $destino=$carpetaDestino.$_FILES["archivo_cv"]["name"][$i];
-
-                        # Movemos el archivo_cv
-                        if(@move_uploaded_file($origen, $destino))
-                        {
-                            echo "<br>".$_FILES["archivo_cv"]["name"][$i]." movido correctamente";
-                        }else{
-                            echo "<br>No se ha podido mover el archivo_cv: ".$_FILES["archivo_cv"]["name"][$i];
-                        }
-                    }else{
-                        echo "<br>No se ha podido crear la carpeta: up/".$user;
-                    }
-                }else{
-                    echo "<br>".$_FILES["archivo_cv"]["name"][$i]." - NO es imagen jpg";
-                }
-            }
-        }else{
-            echo "<br>No se ha subido ninguna imagen";
-        }
 
 
     ?>
 
 
-    <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="post" enctype="multipart/form-data" name="inscripcion">
-        <p>Suba el foto</p>
-        <input type="file" name="archivo_foto[]" multiple="multiple">
-        <br>
-        <br>
-        <p>Suba el cv</p>
-        <input type="file" name="archivo_cv[]" multiple="multiple">
-        <br>
-        <br>         
-        <input type="submit" value="Enviar"  class="trig">
-    </form>
+    <form enctype="multipart/form-data" action="" method="POST">
+        <p>Suba Imagen JPG</p>
+        <input name="uploadedfile" type="file">
+         <p>Suba documento PDF</p>
+        <input name="uploadedfilePDF" type="file">
+        <input type="submit" value="Subir archivos">
+    </form> 
     
 </body>
 </html>
