@@ -22,13 +22,11 @@
             echo $msg;
             }
 
-        # Compruebo el tipo de archivo seleccionado sea JPG, Gif y PNG
+        # Compruebo el tipo de archivo seleccionado sea JPG
     
-        if (!($_FILES[uploadedfileJPG][type] =="image/jpeg" OR 
-              $_FILES[uploadedfileJPG][type] =="image/gif" OR                   
-              $_FILES[uploadedfileJPG][type] =="image/png"))
+        if (!($_FILES[uploadedfileJPG][type] =="image/jpeg"))
                 {
-                    $msg=$msg." Tu archivo tiene que ser JPG o GIF o PDF. Otros archivos no son permitidos.<br>";
+                    $msg=$msg." Tu archivo tiene que ser JPG. Otros archivos no son permitidos.<br>";
                     $uploadedfileJPGload="false";
                 }
     
@@ -66,7 +64,8 @@
             {
             
             // Chequeo si el archivo existe y si es así lo renombro
-            if (file_exists($addJPG)) {
+            if (file_exists($addJPG)) 
+                {
                 
                 echo "Anda!!! El archivo existe";
                 
@@ -75,11 +74,6 @@
                 
                 $addJPG = "fotos/" . $nombrefichero . $extension;
                 
-                /*
-                $extension = end(explode('.', $_FILES["archivo"]["tmp_name"]));
-                $nombrefichero = time();
-                move_uploaded_file($_FILES["archivo"]["tmp_name"], "archivos/" . $nombrefichero . $extension);
-                */
             }
 
             if(move_uploaded_file ($_FILES[uploadedfileJPG][tmp_name], $addJPG))
@@ -99,6 +93,30 @@
 
         if($uploadedfilePDFDOCload=="true")
             {
+            
+            // Chequeo si el archivo existe y si es así lo renombro
+            
+            if (file_exists($addPDFDOC)) 
+                {
+                
+                echo "Anda!!! El archivo PDF o doc existe";
+                
+                // Chequeo qué extensión tiene 
+               
+                if(end(explode('.', $file_namePDFDOC == "pdf")))
+                    {
+                    $extension = ".pdf";
+                    }else{
+                            $extension = ".doc";
+                        }
+                
+                $nombrefichero = time();
+                
+                $addPDFDOC = "curriculums/" . $nombrefichero . $extension;
+                
+
+                }
+            
 
             if(move_uploaded_file ($_FILES[uploadedfilePDFDOC][tmp_name], $addPDFDOC))
                 {
