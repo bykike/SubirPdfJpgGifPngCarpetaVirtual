@@ -99,21 +99,26 @@
             if (file_exists($addPDFDOC)) 
                 {
                 
-                echo "Anda!!! El archivo PDF o doc existe";
+                echo "Anda!!! El archivo PDF o doc existe $file_namePDFDOC / $addPDFDOC /   ";
                 
                 // Chequeo qué extensión tiene 
                
-                if(end(explode('.', $file_namePDFDOC == "pdf")))
+                if(end( explode('.', $file_namePDFDOC) ) == "pdf") // Aquí sólo coge hasta el punto por lo que no lo contempla
                     {
                     $extension = ".pdf";
-                    }else{
-                            $extension = ".doc";
-                        }
+                    }
+                if(end( explode('.', $file_namePDFDOC) ) == "doc")
+                    {
+                    $extension = ".doc";
+                    }
+                
+                var_dump($extension); ////////////////////////////////
                 
                 $nombrefichero = time();
                 
                 $addPDFDOC = "curriculums/" . $nombrefichero . $extension;
                 
+                var_dump($addPDFDOC); ////////////////////////////////
 
                 }
             
