@@ -1,0 +1,8 @@
+CREATE SCHEMA `BDCandidatos` DEFAULT CHARACTER SET latin1 ;
+DROP TABLE IF EXISTS `BDAltas`;
+CREATE TABLE IF NOT EXISTS `BDAltas` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `nombre` varchar(200) NOT NULL,
+  `foto` varchar(200) NOT NULL,
+  `curriculum` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

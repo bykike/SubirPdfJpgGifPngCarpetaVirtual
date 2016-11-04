@@ -14,7 +14,6 @@
     
         # Compruebo el tamaño para la imagen seleccionada para JPG
     
-        // echo $_FILES[uploadedfileJPG][name];
         if ($_FILES[uploadedfileJPG][size] > 1000000) /* Equivale a 500000 equivale a 500Kb */
             {
             $msg=$msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo.<br>"; 
@@ -33,7 +32,6 @@
     
         # Compruebo el tamaño para el documento seleccionado del PDF o DOC
     
-        // echo $_FILES[uploadedfilePDFDOC][name];
         if ($_FILES[uploadedfilePDFDOC][size] > 1000000) /* Equivale a 500000 equivale a 500Kb */
             {
             $msg = $msg."El archivo es mayor de 1MB, debes reduzcirlo antes de subirlo.<br>";
@@ -46,7 +44,7 @@
         if (!($_FILES[uploadedfilePDFDOC][type] =="application/pdf" OR               
               $_FILES[uploadedfilePDFDOC][type] =="application/msword"))
                 {
-                    $msg = $msg." Tu archivo tiene que ser PDF o DOC. Otros archivos no son permitidos.<br>";
+                    $msg = $msg."Tu archivo tiene que ser PDF o DOC. Otros archivos no son permitidos.<br>";
                     $uploadedfilePDFDOCload="false";
                 }
     
@@ -67,7 +65,7 @@
             if (file_exists($addJPG)) 
                 {
                 
-                echo "Anda!!! El archivo existe";
+                echo "Anda!!! El archivo existe $file_nameJPG / $addJPG ";
                 
                 $extension = ".jpg";
                 $nombrefichero = time();
@@ -99,7 +97,7 @@
             if (file_exists($addPDFDOC)) 
                 {
                 
-                echo "Anda!!! El archivo PDF o doc existe $file_namePDFDOC / $addPDFDOC /   ";
+                echo "Anda!!! El archivo PDF o doc existe $file_namePDFDOC / $addPDFDOC ";
                 
                 // Chequeo qué extensión tiene 
                
@@ -134,9 +132,33 @@
                   //echo $msgPDFDOC;
                  } 
 
+
+        ####################################################################################################
+        # Guarda todo en la vase de datos MySql
+        #################################################################################################### 
+
+        # Conectamos con MySQL por medio de mysqli
+        $link=mysqli_connect("localhost","root","root","BDCandidatos");
+        if (mysqli_connect_errno()) {
+            die("Error al conectar: ".mysqli_connect_error());
+        }
+ 
+        # Agregamos campos a la base de datos
+        $elnombre=$_POST["elnombre"];
+        $sql="INSERT INTO BDAltas (nombre, foto, curriculum) VALUES ( '$elnombre', '$addJPG', '$addPDFDOC' )";
+        $result = mysqli_query($link,$sql);
+        echo $result;
+
+
+        # desconectamos Base de datos       
+        $close = mysqli_close($link) 
+        or die("Ha sucedido un error inexperado en la desconexion de la base de datos");
+
         ####################################################################################################
         # Volver al formulario
         #################################################################################################### 
+
+        echo "todo se ha procesado";
 
         $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
         echo "<a href='$url'>Volver</a>";

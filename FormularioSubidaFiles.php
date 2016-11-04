@@ -12,6 +12,8 @@
     
     
     <form enctype="multipart/form-data" action="SubirArchivoscarpetaVirtual.php" method="POST">
+        <p>Escriba nombre: </p>
+        <input name="elnombre" type="text"><br><br>
         <p>Suba la foto JPG</p>
         <input name="uploadedfileJPG" type="file">
          <p>Suba el documento enPDF</p>
