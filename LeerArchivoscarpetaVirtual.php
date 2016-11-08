@@ -25,7 +25,7 @@
             
         }
 
-        # Libero la memoria asociada a result
+        # Libero la memoria asociada a result y cierro base de datos
         mysqli_free_result($result);
         mysqli_close($link);
 
